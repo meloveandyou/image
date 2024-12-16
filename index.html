@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pomodoro Timer Widget</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: url('https://i.imgur.com/qmEKtWb.jpeg') no-repeat center center fixed;
+      background-size: cover;
+    }
+
+    #pomodoro-widget {
+      background: rgba(255, 255, 255, 0.8);
+      border-radius: 20px;
+      box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.1);
+      padding: 30px;
+      text-align: center;
+      backdrop-filter: blur(10px);
+      max-width: 400px;
+      width: 100%;
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    #timer {
+      font-size: 3rem;
+      font-weight: 600;
+      margin-bottom: 20px;
+      color: #e91e63;
+    }
+
+    button {
+      background: #e91e63;
+      color: #fff;
+      border: none;
+      padding: 12px 20px;
+      font-size: 1rem;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin: 5px;
+    }
+
+    button:hover {
+      background: #d81b60;
+      box-shadow: 0 5px 10px rgba(233, 30, 99, 0.5);
+    }
+
+    #status {
+      font-size: 1.2rem;
+      margin-top: 10px;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+  <div id="pomodoro-widget">
+    <h1>Pomodoro Timer</h1>
+    <div id="timer">25:00</div>
+    <button onclick="startTimer()">Start</button>
+    <button onclick="pauseTimer()">Pause</button>
+    <button onclick="resetTimer()">Reset</button>
+    <div id="status">Ready to focus?</div>
+  </div>
+
+  <script>
+    let timer;
+    let isRunning = false;
+    let timeLeft = 1500; // 25 minutes in seconds
+
+    const timerDisplay = document.getElementById('timer');
+    const statusDisplay = document.getElementById('status');
+
+    function startTimer() {
+      if (!isRunning) {
+        isRunning = true;
+        statusDisplay.textContent = "Focus mode!";
+        timer = setInterval(() => {
+          timeLeft--;
+          updateTimerDisplay();
+
+          if (timeLeft <= 0) {
+            clearInterval(timer);
+            statusDisplay.textContent = "Time's up! Take a break.";
+            isRunning = false;
+          }
+        }, 1000);
+      }
+    }
+
+    function pauseTimer() {
+      clearInterval(timer);
+      isRunning = false;
+      statusDisplay.textContent = "Paused.";
+    }
+
+    function resetTimer() {
+      clearInterval(timer);
+      isRunning = false;
+      timeLeft = 1500;
+      updateTimerDisplay();
+      statusDisplay.textContent = "Ready to focus?";
+    }
+
+    function updateTimerDisplay() {
+      const minutes = Math.floor(timeLeft / 60);
+      const seconds = timeLeft % 60;
+      timerDisplay.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+    }
+
+    updateTimerDisplay();
+  </script>
+</body>
+</html>
